@@ -1,5 +1,5 @@
- import api from './api'
+import api from './api'
 
- export function getApiStatus() {
-   return api.get('/api')
- }
+export function getApiStatus() {
+  return api.get('/')
+}

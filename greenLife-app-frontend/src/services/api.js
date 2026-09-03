@@ -1,3 +1,9 @@
+/**
+ * O Interceptor de resposta do Axios centraliza o tratamento de erros:
+ * 1. Sucesso: "descasca" a resposta para retornar apenas o `data` (o conteúdo útil).
+ * 2. API Error: Captura erros da API (4xx/5xx), normalizando-os no formato esperado.
+ * 3. Network Error: Captura erros de rede/servidor offline, fornecendo uma mensagem amigável.
+ */
 import axios from 'axios'
 
 const api = axios.create({
@@ -19,9 +25,9 @@ api.interceptors.response.use(
         status: error.response.status,
       })
     } else if (error.request) {
-      // A requisição foi enviada, mas nenhuma resposta chegou (API fora do ar, sem rede)    
+      // A requisição foi enviada, mas nenhuma resposta chegou (API fora do ar, sem rede)
       return Promise.reject({
-        message: 'Não foi possível se conectar ao servidor. Verifique sua conexão ou tente novamente mais tarde.',
+        message: 'Não foi possível se conectar ao servidor. Verifique sua conexão ou tente mais tarde.',
         errors: [],
         status: null,
       })

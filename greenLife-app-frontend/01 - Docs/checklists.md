@@ -1,3 +1,13 @@
+# Ficha de Preparação - greenLife
+
+- **Nome do Projeto:** greenLife
+- **Entidade Principal:** Product
+- **Campo de busca da entidade principal (plural, camelCase):** `products`
+- **Porta da API:** 3000
+- **Porta do Front:** 5173
+
+---
+
 # Checklists da Atividade - Aula 01
 
 ## PARTE A - Backend
@@ -31,3 +41,26 @@
 - [x] TheNavbar.vue , TheSidebar.vue e TheFooter.vue criados
 - [x] Layout montado em App.vue , com <router-view /> no lugar certo
 - [x] Landing Page exibindo "Status da API: online" com dados reais
+
+# Checklists da Atividade - Aula 02
+
+## PARTE A - Backend: o primeiro módulo de domínio
+
+- [x] Pasta `modules/search/` criada
+- [x] `searchService.js` criado, com nome `products` no plural
+- [x] `searchController.js` criado, usando `exports.search`
+- [x] `searchRoutes.js` criado, com `router.get('/search', ...)`
+- [x] `searchRoutes` importado e registrado em `app.js`
+- [x] API reiniciou sem erros
+- [x] Testes isolados com `curl` realizados (busca com/sem termo e `/api` funcional)
+
+## PARTE B - Frontend: a camada de comunicação
+
+- [x] `src/services/api.js` criado com `axios.create(...)`
+- [x] Interceptor de resposta adicionado em `api.js` com comentários explicativos
+- [x] `authService.js` criado
+- [x] `searchService.js` criado, usando `params: { q: query }`
+- [x] `systemService.js` criado
+- [x] `LandingView.vue` refatorada usando `systemService`
+- [x] Validação de ponta a ponta realizada (teste temporário e erro de rede)
+- [x] Código de teste temporário removido
