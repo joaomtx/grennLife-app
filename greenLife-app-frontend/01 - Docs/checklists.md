@@ -1,3 +1,6 @@
+- **Nome do banco de dados MySQL do seu projeto:** `greenlife_db`
+- **Nome do campo de contagem de itens publicados:** `productsCount`
+
 # Ficha de Preparação - greenLife
 
 - **Nome do Projeto:** greenLife
@@ -54,7 +57,7 @@
 - [x] API reiniciou sem erros
 - [x] Testes isolados com `curl` realizados (busca com/sem termo e `/api` funcional)
 
-## PARTE B - Frontend: a camada de comunicação
+# Checklists da Atividade - Aula 02
 
 - [x] `src/services/api.js` criado com `axios.create(...)`
 - [x] Interceptor de resposta adicionado em `api.js` com comentários explicativos
@@ -64,3 +67,36 @@
 - [x] `LandingView.vue` refatorada usando `systemService`
 - [x] Validação de ponta a ponta realizada (teste temporário e erro de rede)
 - [x] Código de teste temporário removido
+
+# Checklists da Atividade - Aula 03
+
+## PARTE A - Backend: persistência de dados e primeiro cadastro real
+
+- [x] sequelize , mysql2 , bcryptjs , express-validator instalados
+- [x] Banco de dados criado no MySQL
+- [x] .env atualizado com DB_HOST , DB_PORT , DB_NAME , DB_USER , DB_PASSWORD
+- [x] config/database.js criado
+- [x] config/constants.js criado
+- [x] userModel.js criado, com o campo de contagem renomeado corretamente
+- [x] userValidator.js criado
+- [x] userService.js criado, com getPublicProfile também usando o campo de contagem renomeado
+- [x] middlewares/asyncHandler.js criado
+- [x] middlewares/errorHandler.js criado
+- [x] userRoutes e errorHandler importados e registrados em app.js
+- [x] Terminal exibe Banco de dados sincronizado! ao subir a API
+- [x] Cadastro com sucesso responde 201 com { id, username, email }
+- [x] Senha curta responde 400 com a mensagem correta
+- [x] Cadastro duplicado responde 500
+- [x] GET /profile/:username confirma os dados persistidos
+
+## PARTE B - Frontend: a Tela de Registro
+
+- [x] Existe um link clicável para /register em algum lugar acessível a um visitante deslogado
+- [x] Formulário controlado com v-model amarrando cada campo a form
+- [x] errors e apiErrorMessage já preparados no <script setup>
+- [x] validate() replica exatamente os mesmos limites configurados no userValidator.js do seu back-end
+- [x] Mensagens de erro aparecem/desaparecem corretamente conforme o usuário corrige os campos
+- [x] Envio vazio não dispara nenhuma chamada de rede
+- [x] Cadastro válido navega para /login
+- [x] Cadastro duplicado exibe apiErrorMessage com a mensagem vinda de verdade da API
+

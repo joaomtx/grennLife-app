@@ -5,6 +5,8 @@ require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var searchRoutes = require('./modules/search/searchRoutes');
+var userRoutes = require('./modules/user/userRoutes'); 
+var errorHandler = require('./middlewares/errorHandler'); 
 
 var app = express();
 
@@ -19,6 +21,7 @@ credentials: true
 
 app.use('/api', indexRouter);
 app.use('/api', searchRoutes);
+app.use('/api', userRoutes); 
 
 app.use((req, res) => {
   res.status(404).json({
@@ -27,5 +30,12 @@ app.use((req, res) => {
     errors: []
   });
 });
+
+app.use(errorHandler); 
+
+const sequelize = require('./config/database');
+sequelize.sync({ alter: true })
+.then(() => console.log('Banco de dados sincronizado!'))
+.catch(err => console.error('Erro ao sincronizar banco:', err));
 
 module.exports = app;
