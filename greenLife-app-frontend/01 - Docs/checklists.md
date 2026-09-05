@@ -100,3 +100,47 @@
 - [x] Cadastro válido navega para /login
 - [x] Cadastro duplicado exibe apiErrorMessage com a mensagem vinda de verdade da API
 
+# Checklists da Atividade - Aula 04
+
+## PARTE A - Backend: Login, JWT e Middleware de Autenticação
+
+### Checklist das tarefas:
+- [x] jsonwebtoken instalado
+- [x] .env atualizado com JWT_SECRET e JWT_EXPIRES_IN
+- [x] config/jwt.js criado e programado
+- [x] middlewares/auth.js criado e programado
+- [x] userService.js atualizado com loginUser e getUserProfile
+- [x] userValidator.js atualizado com loginValidator
+- [x] userController.js atualizado com login , logout , getMyProfile
+- [x] userRoutes.js atualizado, com /profile/me antes de /profile/:username
+
+### Checklist dos testes:
+- [x] Login com sucesso devolve token e user (incluindo isAdmin )
+- [x] Senha errada devolve 500 com mensagem genérica
+- [x] GET /profile/me sem token devolve 401
+- [x] GET /profile/me com token válido devolve os dados do usuário
+- [x] GET /profile/me com token inválido devolve 401
+
+## PARTE B - Frontend: Login, Pinia e Proteção de Rotas
+
+### Checklist das tarefas:
+- [x] createPinia() registrado em main.js
+- [x] stores/auth.js criado, com persistência via localStorage
+- [x] Interceptor de requisição anexando Authorization
+- [x] Interceptor de resposta limpando a sessão e redirecionando em qualquer 401
+- [x] Bootstrap 5 (CDN) incluído
+- [x] assets/main.css criado, com a cor de marca
+- [x] Tela de Login funcional, chamando authStore.login(...)
+- [x] Destino pós-login ajustado
+- [x] Guarda de rota bloqueando acesso direto
+- [x] useAuthStore() chamado dentro do callback
+- [x] Navbar mostra links diferentes conforme o estado de login
+- [x] Logout limpa a sessão e redireciona ao Login
+
+### Checklist de testes
+- [x] Login funcional -> redireciona à tela principal.
+- [x] F5 na página logado -> sessão persiste.
+- [x] Logout -> URL protegida redireciona ao Login, com ?redirect=...
+- [x] Login a partir dessa tela -> volta à rota original.
+- [x] Edição manual do token no localStorage -> redirecionado ao Login (teste do interceptor).
+
