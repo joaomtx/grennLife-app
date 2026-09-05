@@ -1,15 +1,30 @@
 <template>
-  <nav class="navbar">
-    <h1>greenLife</h1>
-    <ul>
-      <li><router-link to="/">Home</router-link></li>
-      <li><router-link to="/login">Login</router-link></li>
-      <li><router-link to="/register">Criar Conta</router-link></li>
-    </ul>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light p-3">
+    <div class="container-fluid">
+      <router-link class="navbar-brand" to="/">GreenLife</router-link>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><router-link class="nav-link" to="/">Home</router-link></li>
+          <li v-if="!authStore.isAuthenticated" class="nav-item"><router-link class="nav-link" to="/login">Login</router-link></li>
+          <li v-if="!authStore.isAuthenticated" class="nav-item"><router-link class="nav-link" to="/register">Criar Conta</router-link></li>
+          <li v-if="authStore.isAuthenticated" class="nav-item">
+            <button class="nav-link btn btn-link" @click="logout">Logout</button>
+          </li>
+        </ul>
+      </div>
+    </div>
   </nav>
 </template>
 
-<style scoped>
-.navbar { background: #eee; padding: 1rem; display: flex; justify-content: space-between; }
-ul { display: flex; list-style: none; gap: 1rem; }
-</style>
+<script setup>
+import { useAuthStore } from '../../stores/auth';
+import { useRouter } from 'vue-router';
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+function logout() {
+  authStore.logout();
+  router.push('/login');
+}
+</script>

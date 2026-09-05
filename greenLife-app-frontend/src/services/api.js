@@ -5,6 +5,7 @@
  * 3. Network Error: Captura erros de rede/servidor offline, fornecendo uma mensagem amigável.
  */
 import axios from 'axios'
+import { useAuthStore } from '../stores/auth'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -13,9 +14,25 @@ const api = axios.create({
   },
 })
 
+// Interceptor de requisição: Adiciona o token JWT se ele existir
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
 api.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    // Interceptor de resposta: Se receber 401, faz logout
+    if (error.response && error.response.status === 401) {
+      const authStore = useAuthStore()
+      authStore.logout()
+      window.location.href = '/login'
+    }
+
     if (error.response) {
       // A API respondeu, mas com um status de erro (4xx ou 5xx)
       const apiError = error.response.data

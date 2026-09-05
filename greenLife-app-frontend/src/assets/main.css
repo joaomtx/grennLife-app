@@ -1,0 +1,13 @@
+:root {
+  --brand-color: #28a745; /* Green color for GreenLife */
+}
+
+.btn-brand {
+  background-color: var(--brand-color);
+  color: white;
+}
+
+.btn-brand:hover {
+  background-color: #218838;
+  color: white;
+}
