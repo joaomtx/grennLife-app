@@ -142,5 +142,36 @@
 - [x] F5 na página logado -> sessão persiste.
 - [x] Logout -> URL protegida redireciona ao Login, com ?redirect=...
 - [x] Login a partir dessa tela -> volta à rota original.
-- [x] Edição manual do token no localStorage -> redirecionado ao Login (teste do interceptor).
+- [ ] Edição manual do token no localStorage -> redirecionado ao Login (teste do interceptor).
+
+# Checklists da Atividade - Aula 05
+
+## PARTE A - Backend: Upload de Arquivos com Multer
+
+### Checklist das tarefas:
+- [ ] Pasta public/uploads/profiles/ criada, com um default-profile.png dentro
+- [ ] multer instalado
+- [ ] BIO_MAX: xxx adicionado a config/constants.js
+- [ ] middlewares/profileMulter.js criado
+- [ ] require('path') e a linha de express.static adicionados, antes das rotas da API
+- [ ] profileUpdateValidator , updateUserProfile , updateProfile e a rota PUT /profile/me criados
+
+### Checklist dos testes:
+- [ ] Atualização sem foto funciona, mantendo a foto atual
+- [ ] Atualização com foto nova funciona, e a foto antiga é removida (se não era a padrão)
+- [ ] GET /uploads/profiles/<qualquer-arquivo> responde 200
+- [ ] Bio acima de xxx caracteres é recusada com 400
+
+## PARTE B - Frontend: Formulário Multipart e a Tela de Meu Perfil
+
+### Checklist das tarefas:
+- [ ] Link para a tela de perfil visível na Navbar (somente logado)
+- [ ] .env atualizado, utils/media.js criado
+- [ ] updateProfile(formData) adicionada (override de Content-Type)
+
+### Checklist dos testes:
+- [ ] Tela carrega dados reais ao montar
+- [ ] Selecionar foto atualiza a prévia instantaneamente (sem rede)
+- [ ] Salvar funciona, com e sem trocar de foto
+
 

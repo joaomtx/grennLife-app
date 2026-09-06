@@ -1,11 +1,15 @@
 var express = require('express');
 var logger = require('morgan');
 var cors = require('cors');
+var path = require('path');
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var searchRoutes = require('./modules/search/searchRoutes');
 var userRoutes = require('./modules/user/userRoutes'); 
+var videoRoutes = require('./routes/videoRoutes');
+var likeRoutes = require('./routes/likeRoutes');
+var commentRoutes = require('./routes/commentRoutes');
 var errorHandler = require('./middlewares/errorHandler'); 
 
 var app = express();
@@ -15,13 +19,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(cors({
-origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-credentials: true
+    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    credentials: true
 }));
+
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 app.use('/api', indexRouter);
 app.use('/api', searchRoutes);
 app.use('/api', userRoutes); 
+app.use('/api/videos', videoRoutes);
+app.use('/api/likes', likeRoutes);
+app.use('/api/comments', commentRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

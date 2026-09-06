@@ -8,6 +8,9 @@
           <li v-if="!authStore.isAuthenticated" class="nav-item"><router-link class="nav-link" to="/login">Login</router-link></li>
           <li v-if="!authStore.isAuthenticated" class="nav-item"><router-link class="nav-link" to="/register">Criar Conta</router-link></li>
           <li v-if="authStore.isAuthenticated" class="nav-item">
+            <router-link class="nav-link" to="/profile">Meu Perfil</router-link>
+          </li>
+          <li v-if="authStore.isAuthenticated" class="nav-item">
             <button class="nav-link btn btn-link" @click="logout">Logout</button>
           </li>
         </ul>

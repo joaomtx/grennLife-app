@@ -24,7 +24,7 @@ api.interceptors.request.use((config) => {
 })
 
 api.interceptors.response.use(
-  (response) => response.data,
+  (response) => response,
   (error) => {
     // Interceptor de resposta: Se receber 401, faz logout
     if (error.response && error.response.status === 401) {
