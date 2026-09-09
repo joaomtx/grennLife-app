@@ -149,29 +149,27 @@
 ## PARTE A - Backend: Upload de Arquivos com Multer
 
 ### Checklist das tarefas:
-- [ ] Pasta public/uploads/profiles/ criada, com um default-profile.png dentro
-- [ ] multer instalado
-- [ ] BIO_MAX: xxx adicionado a config/constants.js
-- [ ] middlewares/profileMulter.js criado
-- [ ] require('path') e a linha de express.static adicionados, antes das rotas da API
-- [ ] profileUpdateValidator , updateUserProfile , updateProfile e a rota PUT /profile/me criados
+- [x] Pasta public/uploads/profiles/ criada, com um default-profile.png dentro
+- [x] multer instalado
+- [x] BIO_MAX: xxx adicionado a config/constants.js
+- [x] middlewares/profileMulter.js criado
+- [x] require('path') e a linha de express.static adicionados, antes das rotas da API
+- [x] profileUpdateValidator , updateUserProfile , updateProfile e a rota PUT /profile/me criados
 
 ### Checklist dos testes:
-- [ ] Atualização sem foto funciona, mantendo a foto atual
-- [ ] Atualização com foto nova funciona, e a foto antiga é removida (se não era a padrão)
-- [ ] GET /uploads/profiles/<qualquer-arquivo> responde 200
-- [ ] Bio acima de xxx caracteres é recusada com 400
+- [x] Atualização sem foto funciona, mantendo a foto atual
+- [x] Atualização com foto nova funciona, e a foto antiga é removida (se não era a padrão)
+- [x] GET /uploads/profiles/<qualquer-arquivo> responde 200
+- [x] Bio acima de xxx caracteres é recusada com 400
 
 ## PARTE B - Frontend: Formulário Multipart e a Tela de Meu Perfil
 
 ### Checklist das tarefas:
-- [ ] Link para a tela de perfil visível na Navbar (somente logado)
-- [ ] .env atualizado, utils/media.js criado
-- [ ] updateProfile(formData) adicionada (override de Content-Type)
+- [x] Link para a tela de perfil visível na Navbar (somente logado)
+- [x] .env atualizado, utils/media.js criado
+- [x] updateProfile(formData) adicionada (override de Content-Type)
 
 ### Checklist dos testes:
-- [ ] Tela carrega dados reais ao montar
-- [ ] Selecionar foto atualiza a prévia instantaneamente (sem rede)
-- [ ] Salvar funciona, com e sem trocar de foto
-
-
+- [x] Tela carrega dados reais ao montar
+- [x] Selecionar foto atualiza a prévia instantaneamente (sem rede)
+- [x] Salvar funciona, com e sem trocar de foto

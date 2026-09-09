@@ -3,6 +3,7 @@ const router = express.Router();
 const videoController = require("../modules/video/videoController");
 const isAuthenticated = require("../middlewares/auth");
 const videoMulter = require("../middlewares/videoMulter");
+const asyncHandler = require("../middlewares/asyncHandler");
 
 // Rotas protegidas
 // Funcionalidade implementada no back-end, sem integração no front-end nesta fase.
