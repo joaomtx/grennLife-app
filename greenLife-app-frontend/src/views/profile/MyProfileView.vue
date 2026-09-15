@@ -1,30 +1,34 @@
 <template>
   <div class="container mt-5">
-    <h2 class="mb-4">Meu Perfil</h2>
-    <div v-if="user" class="card p-4">
-      <form @submit.prevent="saveProfile">
-        <div class="row">
-          <div class="col-md-4 text-center">
-            <img :src="imagePreview || getMediaUrl(user.profilePicture)" alt="Foto de perfil" class="img-thumbnail mb-3" style="max-width: 200px;">
-            <input type="file" @change="onFileChange" class="form-control" accept="image/*">
-          </div>
-          <div class="col-md-8">
-            <div class="mb-3">
-              <label class="form-label">Nome Completo</label>
-              <input v-model="form.fullName" type="text" class="form-control" required>
+    <FormCard title="Meu Perfil">
+      <div v-if="user">
+        <form @submit.prevent="saveProfile">
+          <div class="row">
+            <div class="col-md-4 text-center">
+              <img :src="imagePreview || getMediaUrl(user.profilePicture)" alt="Foto de perfil" class="img-thumbnail mb-3" style="max-width: 200px;">
+              <input type="file" @change="onFileChange" class="form-control mb-3" accept="image/*">
             </div>
-            <div class="mb-3">
-              <label class="form-label">Bio</label>
-              <textarea v-model="form.bio" class="form-control" rows="3"></textarea>
-              <small class="text-muted">{{ form.bio?.length || 0 }} / 255</small>
+            <div class="col-md-8">
+              <BaseInput
+                id="fullName"
+                label="Nome Completo"
+                v-model="form.fullName"
+                placeholder="Seu nome completo"
+                required
+              />
+              <div class="mb-3">
+                <label class="form-label">Bio</label>
+                <textarea v-model="form.bio" class="form-control" rows="3"></textarea>
+                <small class="text-muted">{{ form.bio?.length || 0 }} / 255</small>
+              </div>
+              <BaseButton type="submit" :disabled="loading">Salvar Alterações</BaseButton>
             </div>
-            <button type="submit" class="btn btn-primary" :disabled="loading">Salvar Alterações</button>
           </div>
-        </div>
-      </form>
-      <div v-if="apiErrorMessage" class="alert alert-danger mt-3">{{ apiErrorMessage }}</div>
-    </div>
-    <p v-else>Carregando...</p>
+        </form>
+        <div v-if="apiErrorMessage" class="alert alert-danger mt-3">{{ apiErrorMessage }}</div>
+      </div>
+      <p v-else>Carregando...</p>
+    </FormCard>
   </div>
 </template>
 
@@ -32,6 +36,9 @@
 import { ref, reactive, onMounted } from 'vue';
 import { getProfile, updateProfile } from '../../services/authService';
 import { getMediaUrl } from '../../utils/media';
+import BaseInput from '../../components/base/BaseInput.vue';
+import BaseButton from '../../components/base/BaseButton.vue';
+import FormCard from '../../components/base/FormCard.vue';
 
 const user = ref(null);
 const form = reactive({ fullName: '', bio: '' });

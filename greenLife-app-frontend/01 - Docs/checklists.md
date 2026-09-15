@@ -144,32 +144,28 @@
 - [x] Login a partir dessa tela -> volta à rota original.
 - [ ] Edição manual do token no localStorage -> redirecionado ao Login (teste do interceptor).
 
-# Checklists da Atividade - Aula 05
+# Checklists da Atividade - Aula 06
 
-## PARTE A - Backend: Upload de Arquivos com Multer
+## PARTE A - Backend: Checkpoint de Consistência
 
-### Checklist das tarefas:
-- [x] Pasta public/uploads/profiles/ criada, com um default-profile.png dentro
-- [x] multer instalado
-- [x] BIO_MAX: xxx adicionado a config/constants.js
-- [x] middlewares/profileMulter.js criado
-- [x] require('path') e a linha de express.static adicionados, antes das rotas da API
-- [x] profileUpdateValidator , updateUserProfile , updateProfile e a rota PUT /profile/me criados
+- [x] checkpoint-01.md criado e respondido
+- [x] Todos os endpoints já construídos continuam respondendo como esperado
 
-### Checklist dos testes:
-- [x] Atualização sem foto funciona, mantendo a foto atual
-- [x] Atualização com foto nova funciona, e a foto antiga é removida (se não era a padrão)
-- [x] GET /uploads/profiles/<qualquer-arquivo> responde 200
-- [x] Bio acima de xxx caracteres é recusada com 400
+## PARTE B - Frontend: Componentização e Consistência Visual
 
-## PARTE B - Frontend: Formulário Multipart e a Tela de Meu Perfil
+- [x] bootstrap-icons incluído via CDN
+- [x] Os três componentes-base (BaseInput, BaseButton, FormCard) criados em src/components/base/
+- [x] As três telas refatoradas para usar BaseInput / BaseButton / FormCard
+- [x] Tela de Registro finalmente estilizada
+- [x] composables/useAuth.js criado
+- [x] Guarda de rota atualizado para usar useAuth()
+- [x] Navbar atualizada para usar useAuth()
+- [x] Nenhum link novo aponta para uma funcionalidade que seu projeto ainda não construiu
 
-### Checklist das tarefas:
-- [x] Link para a tela de perfil visível na Navbar (somente logado)
-- [x] .env atualizado, utils/media.js criado
-- [x] updateProfile(formData) adicionada (override de Content-Type)
-
-### Checklist dos testes:
-- [x] Tela carrega dados reais ao montar
-- [x] Selecionar foto atualiza a prévia instantaneamente (sem rede)
-- [x] Salvar funciona, com e sem trocar de foto
+### Checklist de testes
+- [x] Cadastro → confirme o redirecionamento ao Login, com a tela agora estilizada.
+- [x] Login → confirme o redirecionamento à sua tela principal.
+- [x] Navbar → confirme a troca correta entre estado logado/deslogado.
+- [x] Edição de Perfil → confirme que os três comportamentos da Atividade 05 (dados reais, edição, upload de foto) continuam funcionando, agora passando pelos componentes-base.
+- [x] Guarda de rota → deslogado, tente acessar a URL de uma tela protegida diretamente → confirme o redirecionamento ao Login.
+- [x] Console do DevTools sem nenhum erro novo durante todo o teste.
