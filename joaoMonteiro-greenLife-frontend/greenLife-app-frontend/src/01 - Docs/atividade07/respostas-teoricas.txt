@@ -1,0 +1,13 @@
+Respostas Teóricas - Atividade Prática Aula 07
+
+1. Por que uma associação precisa ser declarada explicitamente?
+O Sequelize é uma ferramenta fantástica, mas ele não tem uma bola de cristal para adivinhar como os dados se relacionam. Precisamos declarar o 'hasMany' ou 'belongsTo' para "ensinar" o Sequelize sobre como as tabelas se conectam. Ao fazer isso explicitamente, ele entende que precisa criar as chaves estrangeiras (as famosas Foreign Keys) no banco de dados e, o mais importante, nos permite trazer dados relacionados em uma única consulta usando o 'include', o que deixa o código muito mais limpo e eficiente.
+
+2. Por que centralizar as associações evita referência circular?
+Esse é um problema clássico de "quem veio primeiro, o ovo ou a galinha". Se o modelo de Usuário tenta importar o modelo de Produto, e ao mesmo tempo o de Produto tenta importar o de Usuário, o Node.js se perde no meio do caminho porque um arquivo tenta carregar antes do outro estar pronto. Criar um arquivo centralizador, como o 'associations.js', resolve isso: ele funciona como um maestro que garante que todos os modelos sejam carregados na ordem correta antes de definir os relacionamentos.
+
+3. Qual a diferença entre multer.single() e multer.fields()?
+A diferença é a quantidade e a flexibilidade. O 'multer.single()' é direto ao ponto: ele espera apenas um único arquivo vindo do formulário com um nome específico. Já o 'multer.fields()' é quando o buraco é mais embaixo e precisamos lidar com vários arquivos ao mesmo tempo, cada um com sua finalidade (como um arquivo de vídeo e outro para a capa), tratando cada um de forma independente dentro da mesma requisição.
+
+4. O que o 'onUploadProgress' do Axios recebe e como calcular a porcentagem?
+O 'onUploadProgress' recebe um objeto com informações sobre o status da transferência, onde o 'loaded' nos diz quantos bytes já foram enviados e o 'total' nos dá o tamanho total do arquivo. Para mostrar essa informação para o usuário de forma amigável, pegamos esses dados e fazemos um cálculo simples de regra de três: Math.round((progressEvent.loaded * 100) / progressEvent.total). O resultado é uma porcentagem inteira entre 0 e 100, perfeita para atualizar uma barra de progresso.

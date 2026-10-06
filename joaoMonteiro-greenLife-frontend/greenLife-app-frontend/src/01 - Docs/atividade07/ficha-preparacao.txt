@@ -1,0 +1,7 @@
+Ficha de Preparação - Atividade Prática Aula 07
+
+- Nome do model da sua entidade principal: Product
+- Nome da tabela: products
+- Grupo: B
+- Nome do campo do arquivo principal: image
+- Nome da coluna de contagem no User: productsCount
