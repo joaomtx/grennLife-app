@@ -1,0 +1,42 @@
+@startuml 03-componentes-api
+skinparam dpi 170
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title GreenLife - Nível 3: Componentes da camada de comunicação (API + Outbox Relay)
+
+Container(spa, "SPA GreenLife", "Vue 3")
+ContainerDb(db, "Banco greenlife_db", "MySQL 8")
+ContainerQueue(broker, "Broker de Mensagens", "RabbitMQ")
+
+Container_Boundary(api, "API GreenLife") {
+  Component(http, "Controllers HTTP", "Express routers", "Adaptadores de entrada: traduzem HTTP para comandos dos casos de uso.")
+  Component(uc, "Casos de uso", "application/", "AlternarCurtida, Comentar, PublicarProduto, EditarProduto, ExcluirProduto.")
+  Component(agg, "Agregados de domínio", "domain/", "Produto, Curtida, Comentario: aplicam invariantes e registram eventos de domínio.")
+  Component(uow, "Unidade de Trabalho", "Porta + adaptador Sequelize", "Abre a transação e devolve os eventos registrados pelos agregados.")
+  Component(bus, "EventBus (porta)", "shared-kernel/application", "Abstração publish(eventos) usada pelos casos de uso.")
+  Component(outboxAdapter, "OutboxEventBus", "infrastructure/messaging", "Implementa EventBus gravando cada evento em outbox_events na mesma transação.")
+  Component(inproc, "Despachante interno", "infrastructure/messaging", "Entrega síncrona a handlers do próprio monólito (ex.: projeção de contadores).")
+}
+
+Container_Boundary(relayB, "Outbox Relay") {
+  Component(poller, "OutboxPoller", "setInterval + SELECT ... FOR UPDATE SKIP LOCKED", "Busca lotes de eventos pendentes.")
+  Component(serializer, "EventEnvelopeSerializer", "JSON", "Monta o envelope: eventId, type, version, occurredAt, aggregateId, correlationId, payload.")
+  Component(publisher, "AmqpPublisher", "amqplib, publisher confirms", "Publica no exchange greenlife.events com a routing key do evento.")
+  Component(retry, "RetryPolicy", "backoff exponencial", "Reagenda falhas e marca 'failed' após N tentativas.")
+}
+
+Rel(spa, http, "REST", "JSON/HTTPS")
+Rel(http, uc, "Chama")
+Rel(uc, agg, "Carrega e altera")
+Rel(uc, uow, "Executa dentro de")
+Rel(uc, bus, "Publica eventos de domínio")
+Rel(outboxAdapter, bus, "Implementa")
+Rel(inproc, bus, "Implementa (adaptador composto)")
+Rel(outboxAdapter, db, "INSERT outbox_events", "SQL")
+Rel(uow, db, "BEGIN/COMMIT", "SQL")
+Rel(poller, db, "Lê pendentes / marca publicados", "SQL")
+Rel(poller, serializer, "Usa")
+Rel(poller, publisher, "Envia lote")
+Rel(publisher, retry, "Em falha, consulta")
+Rel(publisher, broker, "basic.publish", "AMQP")
+@enduml

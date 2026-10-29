@@ -1,0 +1,42 @@
+@startuml 04-componentes-notificacoes
+skinparam dpi 170
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title GreenLife - Nível 3: Componentes do Serviço de Notificações
+
+Container(spa, "SPA GreenLife", "Vue 3 + Socket.IO client")
+ContainerQueue(broker, "Broker de Mensagens", "RabbitMQ")
+ContainerDb(notifdb, "Banco de notificações", "MySQL 8")
+System_Ext(email, "Provedor de E-mail", "SMTP")
+
+Container_Boundary(notif, "Serviço de Notificações") {
+  Component(consumer, "AmqpConsumer", "amqplib, prefetch=10, ack manual", "Consome a fila notifications.q (bindings interacoes.#).")
+  Component(guard, "IdempotencyGuard", "processed_events", "Descarta eventos já processados (entrega at-least-once).")
+  Component(router, "EventRouter", "mapa tipo -> handler", "Direciona o evento ao handler pelo campo type; novos tipos entram sem alterar o router (OCP).")
+  Component(hLike, "ProdutoCurtidoHandler", "application", "Cria 'Fulano curtiu seu produto'; ignora curtida no próprio produto.")
+  Component(hComment, "ComentarioAdicionadoHandler", "application", "Cria 'Fulano comentou: ...'.")
+  Component(repo, "NotificationRepository", "Sequelize", "Grava e lista notificações; controla lidas/não lidas.")
+  Component(prefs, "PreferenceService", "application", "Consulta se o membro quer push e/ou e-mail.")
+  Component(gateway, "RealtimeGateway", "Socket.IO + JWT", "Sala por usuário (user:{id}); emite 'notification:new'.")
+  Component(mailer, "EmailNotifier", "nodemailer", "Adaptador de saída para e-mail.")
+  Component(rest, "NotificationController", "Express", "GET /notifications, PATCH /notifications/:id/read.")
+}
+
+Rel(broker, consumer, "Entrega mensagem", "AMQP")
+Rel(consumer, guard, "Verifica eventId")
+Rel(consumer, router, "Encaminha")
+Rel(router, hLike, "type = ProdutoCurtido")
+Rel(router, hComment, "type = ComentarioAdicionado")
+Rel(hLike, repo, "Salva")
+Rel(hComment, repo, "Salva")
+Rel(hLike, prefs, "Consulta")
+Rel(hComment, prefs, "Consulta")
+Rel(hLike, gateway, "Notifica autor")
+Rel(hComment, gateway, "Notifica autor")
+Rel(hComment, mailer, "Se preferência ativa")
+Rel(repo, notifdb, "SQL")
+Rel(guard, notifdb, "SQL")
+Rel(mailer, email, "SMTP")
+Rel(gateway, spa, "Push", "WebSocket")
+Rel(spa, rest, "Lista / marca como lida", "JSON/HTTPS")
+@enduml

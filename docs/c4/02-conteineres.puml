@@ -1,0 +1,37 @@
+@startuml 02-conteineres
+skinparam dpi 170
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title GreenLife - Nível 2: Diagrama de Contêineres (nova camada de comunicação)
+
+Person(membro, "Membro da comunidade")
+System_Ext(email, "Provedor de E-mail", "SMTP")
+
+System_Boundary(gl, "GreenLife") {
+  Container(spa, "SPA GreenLife", "Vue 3, Vite, Pinia, Axios, Socket.IO client", "Telas de feed, detalhe, perfis, Meus Itens, Curtidos e central de notificações.")
+  Container(api, "API GreenLife", "Node.js, Express, Sequelize", "Monólito modular (contextos DDD). Executa os casos de uso e grava os eventos de domínio na outbox, na mesma transação.")
+  ContainerDb(db, "Banco greenlife_db", "MySQL 8", "users, products, likes, comments e a tabela outbox_events.")
+  Container(files, "Armazenamento de mídia", "Sistema de arquivos /uploads", "Imagens originais de produto e de perfil, e as miniaturas geradas.")
+
+  Container(relay, "Outbox Relay", "Node.js (worker)", "Lê eventos pendentes da outbox e os publica no broker; marca como publicados.")
+
+  ContainerQueue(broker, "Broker de Mensagens", "RabbitMQ 3.13 (AMQP 0-9-1)", "Exchange topic greenlife.events, filas por consumidor e dead-letter queues.")
+
+  Container(notif, "Serviço de Notificações", "Node.js, Express, Socket.IO", "Consome eventos de interação, grava notificações e as entrega em tempo real.")
+  ContainerDb(notifdb, "Banco de notificações", "MySQL 8 (schema greenlife_notifications)", "notifications, notification_preferences, processed_events.")
+  Container(media, "Worker de Mídia", "Node.js, sharp", "Gera miniaturas WebP de produtos publicados/editados e remove arquivos de produtos excluídos.")
+}
+
+Rel(membro, spa, "Usa", "HTTPS")
+Rel(spa, api, "Chamadas REST", "JSON/HTTPS")
+Rel(spa, notif, "Lista notificações e recebe push", "REST + WebSocket (JWT)")
+Rel(api, db, "Lê/grava dados e outbox (mesma transação)", "SQL")
+Rel(api, files, "Grava a imagem original no upload", "FS")
+Rel(relay, db, "Lê outbox_events pendentes", "SQL")
+Rel(relay, broker, "Publica eventos", "AMQP")
+Rel(broker, notif, "Entrega ProdutoCurtido, ComentarioAdicionado", "AMQP")
+Rel(broker, media, "Entrega ProdutoPublicado, ProdutoEditado, ProdutoExcluido", "AMQP")
+Rel(notif, notifdb, "Lê/grava", "SQL")
+Rel(notif, email, "Envia e-mail (opcional)", "SMTP")
+Rel(media, files, "Gera miniaturas / remove arquivos", "FS")
+@enduml

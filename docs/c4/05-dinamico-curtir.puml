@@ -1,0 +1,25 @@
+@startuml 05-dinamico-curtir
+skinparam dpi 170
+!include <C4/C4_Dynamic>
+LAYOUT_LEFT_RIGHT()
+SHOW_LEGEND()
+title GreenLife - Diagrama Dinâmico: "Membro B curte o produto do Membro A"
+
+Person(b, "Membro B")
+Container(spa, "SPA GreenLife", "Vue 3")
+Container(api, "API GreenLife", "Express")
+ContainerDb(db, "greenlife_db", "MySQL")
+Container(relay, "Outbox Relay", "Node.js")
+ContainerQueue(broker, "RabbitMQ", "greenlife.events")
+Container(notif, "Serviço de Notificações", "Node.js + Socket.IO")
+Person(a, "Membro A (autor)")
+
+Rel(b, spa, "Clica no coração (atualização otimista)")
+Rel(spa, api, "POST /api/products/5/toggle-like", "HTTPS")
+Rel(api, db, "Na MESMA transação: INSERT likes, likesCount+1, INSERT outbox_events(ProdutoCurtido)", "SQL")
+Rel(api, spa, "201 {liked:true, likesCount}", "HTTPS")
+Rel(relay, db, "Lê evento pendente", "SQL")
+Rel(relay, broker, "Publica interacoes.produto.curtido", "AMQP")
+Rel(broker, notif, "Entrega mensagem", "AMQP")
+Rel(notif, a, "Push: 'B curtiu seu produto'", "WebSocket")
+@enduml

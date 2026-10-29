@@ -1,0 +1,19 @@
+@startuml 01-contexto
+skinparam dpi 170
+!include <C4/C4_Context>
+LAYOUT_LEFT_RIGHT()
+SHOW_LEGEND()
+title GreenLife - Nível 1: Diagrama de Contexto (com mensageria)
+
+Person(visitante, "Visitante", "Navega pelos perfis e pelos produtos publicados, sem conta.")
+Person(membro, "Membro da comunidade", "Publica plantas/produtos, curte, comenta e recebe notificações.")
+
+System(greenlife, "GreenLife", "Rede social de plantas: publicação de produtos com imagem, feed, curtidas, comentários, perfis e notificações.")
+
+System_Ext(email, "Provedor de E-mail", "SMTP transacional (ex.: SendGrid / Mailtrap em desenvolvimento).")
+
+Rel(visitante, greenlife, "Navega no feed e em perfis públicos", "HTTPS")
+Rel(membro, greenlife, "Publica, curte, comenta; recebe notificações em tempo real", "HTTPS / WebSocket")
+Rel(greenlife, email, "Envia aviso de nova interação (opcional, por preferência do membro)", "SMTP")
+Rel(email, membro, "Entrega o e-mail")
+@enduml
