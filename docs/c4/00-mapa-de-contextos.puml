@@ -1,0 +1,26 @@
+@startuml 00-mapa-de-contextos
+skinparam dpi 170
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam defaultFontName DejaVu Sans
+title GreenLife - Mapa de Contextos (DDD)
+
+package "Shared Kernel" as SK #EEEEEE {
+  [UserId, ProductId, DomainEvent,\nDomainError, EventBus, UnitOfWork] as sk
+}
+component "Identidade e Acesso\n(Generic)" as ID #DDEBF7
+component "Perfil\n(Supporting)" as PF #E2EFDA
+component "Catálogo de Produtos\n(Core)" as CT #C6E0B4
+component "Interações\n(Core)" as IN #C6E0B4
+component "Descoberta: Feed e Busca\n(Supporting - read model)" as DS #FFF2CC
+component "Notificações\n(Supporting - Questão 2)" as NT #FCE4D6
+
+ID -down-> PF : U/D - OHS\nUsuário registrado cria perfil
+ID -down-> CT : U/D - Conformist\n(UserId do token)
+ID -down-> IN : U/D - Conformist\n(UserId do token)
+CT -right-> IN : Customer/Supplier\nProdutoExcluido, ProdutoId
+CT -down-> DS : Published Language\n(eventos)
+IN -down-> DS : Published Language\n(contadores)
+PF -down-> DS : ACL\n(dados do autor)
+IN -right-> NT : Published Language\nProdutoCurtido, ComentarioAdicionado
+@enduml

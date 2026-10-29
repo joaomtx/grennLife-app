@@ -1,0 +1,1 @@
+<!-- Curtir com atualização otimista. -->
