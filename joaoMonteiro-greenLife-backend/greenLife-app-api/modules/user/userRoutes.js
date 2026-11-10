@@ -6,6 +6,7 @@ const asyncHandler = require('../../middlewares/asyncHandler');
 const isAuthenticated = require('../../middlewares/auth');
 const profileMulter = require('../../middlewares/profileMulter');
 
+router.get('/feed', isAuthenticated, asyncHandler(userController.getFeed));
 router.post('/register', registerValidator, asyncHandler(userController.register));
 router.post('/login', loginValidator, asyncHandler(userController.login));
 router.post('/logout', asyncHandler(userController.logout));

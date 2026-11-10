@@ -1,15 +1,20 @@
-const API_URL = import.meta.env.VITE_API_URL.replace('/api', '')
+const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api').replace(/\/api\/?$/, '')
 
 export const getMediaUrl = (path) => {
   if (!path) return ''
-  // Se já for uma URL completa, retorna ela mesma
-  if (path.startsWith('http')) return path
-  
-  // Se for uma foto de perfil, adiciona o caminho correto
-  if (path.startsWith('profile-')) {
-    return `${API_URL}/uploads/profiles/${path}`
+  if (/^https?:\/\//i.test(path)) return path
+
+  if (path.startsWith('profile-') || path === 'default-profile.png') {
+    return `${API_URL}/uploads/profiles/${encodeURIComponent(path)}`
   }
-  
-  // Caso contrário, concatena com a base da API
+
   return `${API_URL}/${path}`
+}
+
+export const getProductImageUrl = (imagePath) => {
+  if (!imagePath) return ''
+  if (/^https?:\/\//i.test(imagePath)) return imagePath
+
+  const filename = imagePath.replace(/^.*[\\/]/, '')
+  return `${API_URL}/uploads/products/${encodeURIComponent(filename)}`
 }

@@ -8,6 +8,9 @@
           <li v-if="!isAuthenticated" class="nav-item"><router-link class="nav-link" to="/login">Login</router-link></li>
           <li v-if="!isAuthenticated" class="nav-item"><router-link class="nav-link" to="/register">Criar Conta</router-link></li>
           <li v-if="isAuthenticated" class="nav-item">
+            <router-link class="nav-link" to="/feed">Feed</router-link>
+          </li>
+          <li v-if="isAuthenticated" class="nav-item">
             <router-link class="nav-link" to="/product/upload">Enviar Produto</router-link>
           </li>
           <li v-if="isAuthenticated" class="nav-item">

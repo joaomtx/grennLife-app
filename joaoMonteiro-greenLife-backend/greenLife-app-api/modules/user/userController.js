@@ -1,4 +1,5 @@
 const userService = require("./userService");
+const productService = require("../product/productService");
 const jwtConfig = require('../../config/jwt');
 const { success } = require('../../middlewares/apiResponse');
 
@@ -54,4 +55,9 @@ exports.getPublicProfile = async (req, res) => {
     } catch (error) {
         throw error;
     }
+};
+
+exports.getFeed = async (req, res) => {
+    const feed = await productService.getFeedProducts(req.query.page, req.query.limit);
+    return success(res, feed);
 };
