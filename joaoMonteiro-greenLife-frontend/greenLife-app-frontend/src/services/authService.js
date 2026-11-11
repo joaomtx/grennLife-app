@@ -25,3 +25,8 @@ export async function updateProfile(formData) {
   })
   return response.data.data
 }
+
+export async function getPublicProfile(username) {
+  const response = await api.get(`/profile/${encodeURIComponent(username)}`)
+  return response.data.data
+}

@@ -48,13 +48,35 @@ exports.updateProfile = async (req, res) => {
 };
 
 exports.getPublicProfile = async (req, res) => {
-    try {
-        const username = req.params.username;
-        const user = await userService.getPublicProfile(username);
-        return success(res, user);
-    } catch (error) {
-        throw error;
-    }
+    const viewerId = req.user ? req.user.id : null;
+    const profile = await userService.getPublicProfile(req.params.username, viewerId);
+    return success(res, profile);
+};
+
+exports.getMyProducts = async (req, res) => {
+    const products = await userService.getMyProducts(req.user.id);
+    return success(res, products);
+};
+
+exports.getProductForEdit = async (req, res) => {
+    const product = await userService.getProductForEdit(req.params.id, req.user.id);
+    return success(res, product);
+};
+
+exports.updateProduct = async (req, res) => {
+    const { title, description } = req.body;
+    const product = await userService.updateProduct(
+        req.params.id,
+        req.user.id,
+        { title, description },
+        req.file
+    );
+    return success(res, product, 'Produto atualizado com sucesso!');
+};
+
+exports.deleteProduct = async (req, res) => {
+    await userService.deleteProduct(req.params.id, req.user.id);
+    return success(res, null, 'Produto excluído com sucesso!');
 };
 
 exports.getFeed = async (req, res) => {

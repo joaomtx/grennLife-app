@@ -17,12 +17,16 @@
       <div class="progress" :style="{ width: uploadProgress + '%' }">{{ uploadProgress }}%</div>
     </div>
 
-    <p v-if="message">{{ message }}</p>
+    <p v-if="message">
+      {{ message }}
+      <RouterLink v-if="uploaded" :to="{ name: 'my-products' }">Ver em Meus Itens</RouterLink>
+    </p>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import { uploadProduct } from '../services/productService'
 
 const title = ref('')
@@ -32,6 +36,7 @@ const previewImage = ref(null)
 const uploadProgress = ref(0)
 const isUploading = ref(false)
 const message = ref('')
+const uploaded = ref(false)
 
 const handleFileChange = (e) => {
   file.value = e.target.files[0]
@@ -43,6 +48,7 @@ const handleFileChange = (e) => {
 const handleSubmit = async () => {
   isUploading.value = true
   message.value = ''
+  uploaded.value = false
   uploadProgress.value = 0
 
   const formData = new FormData()
@@ -55,6 +61,7 @@ const handleSubmit = async () => {
       uploadProgress.value = progress
     })
     message.value = 'Produto enviado com sucesso!'
+    uploaded.value = true
     title.value = ''
     description.value = ''
     file.value = null

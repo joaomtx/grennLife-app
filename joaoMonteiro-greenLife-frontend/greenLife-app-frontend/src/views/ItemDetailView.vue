@@ -17,17 +17,30 @@
         <p class="item-detail__eyebrow">Produto da comunidade</p>
         <h1>{{ product.title }}</h1>
         <p v-if="product.description" class="item-detail__description">{{ product.description }}</p>
-        <div class="item-detail__author">
+        <RouterLink
+          v-if="product.User?.username"
+          class="item-detail__author"
+          :to="{ name: 'public-profile', params: { username: product.User.username } }"
+        >
           <img
             :src="getMediaUrl(product.User?.profilePicture)"
             :alt="`Foto de ${authorName}`"
           />
           <div>
             <strong>{{ authorName }}</strong>
-            <span v-if="product.User?.username">@{{ product.User.username }}</span>
+            <span>@{{ product.User.username }}</span>
           </div>
-        </div>
+        </RouterLink>
         <p class="item-detail__views">{{ product.views }} visualizações</p>
+        <!-- Só aparece para o dono. Isso é conveniência de interface, não segurança:
+             quem garante a permissão é o 403 da API. -->
+        <RouterLink
+          v-if="isOwner"
+          class="btn-green item-detail__edit"
+          :to="{ name: 'product-edit', params: { id: product.id } }"
+        >
+          <i class="bi bi-pencil-square"></i> Editar
+        </RouterLink>
       </div>
     </article>
   </section>
@@ -124,10 +137,20 @@ watch(
 }
 
 .item-detail__author {
+  color: inherit;
+  text-decoration: none;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   margin-top: 1.5rem;
+}
+
+.item-detail__author:hover strong {
+  text-decoration: underline;
+}
+
+.item-detail__edit {
+  margin-top: 1rem;
 }
 
 .item-detail__author img {

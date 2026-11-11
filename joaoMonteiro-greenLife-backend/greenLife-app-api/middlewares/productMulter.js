@@ -20,7 +20,9 @@ const upload = multer({
         if (mimetype && extname) {
             return cb(null, true);
         }
-        cb(new Error("Apenas imagens são permitidas!"));
+        const error = new Error("Apenas imagens são permitidas!");
+        error.status = 400;
+        cb(error);
     }
 });
 

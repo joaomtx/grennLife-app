@@ -62,3 +62,16 @@ exports.profileUpdateValidator = [
         .trim(),
     validate
 ];
+
+exports.productUpdateValidator = [
+    body('title')
+        .trim()
+        .notEmpty()
+        .withMessage('O título do produto é obrigatório.'),
+    body('description')
+        .optional({ checkFalsy: true })
+        .trim()
+        .isLength({ max: VALIDATION.DESCRIPTION_MAX })
+        .withMessage(`A descrição deve ter no máximo ${VALIDATION.DESCRIPTION_MAX} caracteres.`),
+    validate
+];
