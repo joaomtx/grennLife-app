@@ -6,8 +6,8 @@ const Product = sequelize.define('Product', {
     description: { type: DataTypes.TEXT },
     imagePath: { type: DataTypes.STRING, allowNull: false },
     views: { type: DataTypes.INTEGER, defaultValue: 0 },
-    likesCount: { type: DataTypes.INTEGER, defaultValue: 0 },
-    commentsCount: { type: DataTypes.INTEGER, defaultValue: 0 }
+    likesCount: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
+    commentsCount: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 }
 }, {
     tableName: 'products'
 });

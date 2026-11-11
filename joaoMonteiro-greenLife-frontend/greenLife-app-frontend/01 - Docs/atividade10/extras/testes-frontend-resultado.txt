@@ -1,0 +1,27 @@
+PASS  Visitante: vê o botão de curtir
+PASS  Visitante: vê a lista de comentários
+PASS  Visitante: sem formulário de comentário
+PASS  Visitante: curtir leva ao login com redirect
+PASS  Depois de entrar volta ao detalhe
+PASS  Logado: coração começa desmarcado
+PASS  Curtir muda o coração na hora
+PASS  Contador sobe 1
+PASS  F5 mantém a curtida
+PASS  Descurtir desfaz
+PASS  Slow 4G: coração muda imediatamente (requisição ainda pendente)
+PASS  Slow 4G: depois da resposta continua curtido
+PASS  Offline: coração muda e volta atrás  — estados: [true,false]
+PASS  Offline: mensagem de erro aparece
+PASS  Comentário vazio / só espaços / 501 caracteres: erro sem chamar a API  — POSTs: 0
+PASS  Comentário válido de duas linhas aparece no topo, com as linhas preservadas
+PASS  Contador de comentários sobe  — 2 → 3
+PASS  XSS: aparece como texto, sem negrito, sem imagem e sem alerta
+PASS  Detalhe: curtir ativo + comentários
+PASS  Tela de curtidos acessível com um clique (Sidebar)
+PASS  Curtidos: mais recente primeiro  — Samambaia Americana, Orquídea Phalaenopsis, Cacto Mandacaru
+PASS  Curtidos também no menu do avatar
+PASS  Descurtir no detalhe tira o item da lista de curtidos  — Samambaia Americana, Cacto Mandacaru
+PASS  Console sem erros (fora o teste offline)
+PASS  Contadores no card do Feed, Perfil e Meus Itens (atualizados)  — esperado "1 4" | feed "1 4" | perfil "1 4" | meus "1 4"
+PASS  A exclui item com curtidas e comentários: funciona
+PASS  O item excluído some da lista de curtidos de B  — Cacto Mandacaru

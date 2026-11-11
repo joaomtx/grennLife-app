@@ -8,6 +8,7 @@ const routes = [
   { path: '/feed', name: 'feed', component: () => import('../views/FeedView.vue'), meta: { requiresAuth: true } },
   { path: '/item/:id', name: 'item-detail', component: () => import('../views/ItemDetailView.vue') },
   { path: '/item/:id/edit', name: 'product-edit', component: () => import('../views/products/ProductEditView.vue'), meta: { requiresAuth: true } },
+  { path: '/liked', name: 'liked-products', component: () => import('../views/products/LikedProductsView.vue'), meta: { requiresAuth: true } },
   { path: '/my-products', name: 'my-products', component: () => import('../views/products/MyProductsView.vue'), meta: { requiresAuth: true } },
   { path: '/profile', name: 'my-profile', component: () => import('../views/profile/MyProfileView.vue'), meta: { requiresAuth: true } },
   { path: '/product/upload', name: 'product-upload', component: () => import('../views/ProductUploadView.vue'), meta: { requiresAuth: true } },

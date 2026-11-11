@@ -1,26 +1,20 @@
-const likeService = require("./likeService");
-const { success } = require("../../middlewares/apiResponse");
+const likeService = require('./likeService');
+const { success } = require('../../middlewares/apiResponse');
 
 exports.toggleLike = async (req, res) => {
-    const { productId } = req.params;
-    const userId = req.user.id;
-
-    try {
-        const result = await likeService.toggleLike(userId, productId);
-        return success(res, result, result.message, result.liked ? 201 : 200);
-    } catch (error) {
-        throw error;
-    }
+    // Ordem dos parâmetros igual à do service: (userId, productId)
+    const result = await likeService.toggleLike(req.user.id, req.params.productId);
+    const message = result.liked ? 'Produto curtido.' : 'Curtida removida.';
+    return success(res, result, message, result.liked ? 201 : 200);
 };
 
-exports.checkLikeStatus = async (req, res) => {
-    const { productId } = req.params;
-    const userId = req.user.id;
+exports.getLikeStatus = async (req, res) => {
+    const userId = req.user ? req.user.id : null;
+    const result = await likeService.getLikeStatus(userId, req.params.productId);
+    return success(res, result);
+};
 
-    try {
-        const liked = await likeService.checkLikeStatus(userId, productId);
-        return success(res, { liked });
-    } catch (error) {
-        throw error;
-    }
+exports.getLikedProducts = async (req, res) => {
+    const products = await likeService.getLikedProducts(req.user.id);
+    return success(res, products);
 };

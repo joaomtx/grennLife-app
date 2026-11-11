@@ -1,5 +1,6 @@
 const Product = require("./productModel");
 const User = require("../user/userModel");
+const Like = require("../like/likeModel");
 
 function getAuthorInclude() {
     return {
@@ -16,7 +17,7 @@ function createHttpError(message, status) {
 
 async function uploadProduct(title, description, imageFile, userId) {
     if (!imageFile) {
-        throw new Error("Por favor, envie a imagem do produto.");
+        throw createHttpError("Por favor, envie a imagem do produto.", 400);
     }
 
     const newProduct = await Product.create({
@@ -55,9 +56,16 @@ async function getProductDetails(productId, viewerId = null) {
     await product.increment("views");
     await product.reload({ include: [getAuthorInclude()] });
 
+    // isLiked: o visitante (sem token) nunca curtiu.
+    let isLiked = false;
+    if (viewerId != null) {
+        isLiked = !!(await Like.findOne({ where: { userId: viewerId, productId: product.id } }));
+    }
+
     return {
         product,
-        isOwner: viewerId != null && Number(product.userId) === Number(viewerId)
+        isOwner: viewerId != null && Number(product.userId) === Number(viewerId),
+        isLiked
     };
 }
 

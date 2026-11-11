@@ -1,15 +1,14 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../config/database');
-const User = require('../user/userModel');
-const Product = require('../product/productModel');
+const { VALIDATION } = require('../../config/constants');
 
+// Comentário de um produto. As associações ficam em config/associations.js.
 const Comment = sequelize.define('Comment', {
-    content: { type: DataTypes.TEXT, allowNull: false }
+    content: { type: DataTypes.STRING(VALIDATION.COMMENT_MAX), allowNull: false },
+    userId: { type: DataTypes.INTEGER, allowNull: false },
+    productId: { type: DataTypes.INTEGER, allowNull: false }
+}, {
+    tableName: 'comments'
 });
-
-Comment.belongsTo(User, { foreignKey: 'userId' });
-Comment.belongsTo(Product, { foreignKey: 'productId' });
-User.hasMany(Comment, { foreignKey: 'userId' });
-Product.hasMany(Comment, { foreignKey: 'productId' });
 
 module.exports = Comment;

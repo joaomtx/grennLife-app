@@ -1,4 +1,5 @@
 const User = require('./userModel');
+const sequelize = require('../../config/database');
 const Product = require('../product/productModel');
 const Like = require('../like/likeModel');
 const Comment = require('../comment/commentModel');
@@ -118,7 +119,7 @@ async function getPublicProfile(username, viewerId = null) {
             "followersCount", "followingCount", "productsCount"],
         include: [{
             model: Product,
-            attributes: ["id", "title", "description", "imagePath", "views", "userId", "createdAt"]
+            attributes: ["id", "title", "description", "imagePath", "views", "likesCount", "commentsCount", "userId", "createdAt"]
         }],
         // order no nível de cima: dentro do include o Sequelize ignora o order.
         order: [[Product, "createdAt", "DESC"], [Product, "id", "DESC"]]
@@ -216,11 +217,14 @@ async function deleteProduct(productId, userId) {
 
     const imageToRemove = product.imagePath;
 
-    // Banco primeiro: dependentes, o próprio item e o contador do dono.
-    await Like.destroy({ where: { productId: product.id } });
-    await Comment.destroy({ where: { productId: product.id } });
-    await product.destroy();
-    await User.decrement('productsCount', { where: { id: userId } });
+    // Banco primeiro, tudo numa transação: curtidas, comentários, o item e o contador do dono.
+    // Se qualquer passo falhar, nada é apagado (rollback) e o arquivo continua no disco.
+    await sequelize.transaction(async (t) => {
+        await Like.destroy({ where: { productId: product.id }, transaction: t });
+        await Comment.destroy({ where: { productId: product.id }, transaction: t });
+        await product.destroy({ transaction: t });
+        await User.decrement('productsCount', { where: { id: userId }, transaction: t });
+    });
 
     // Disco depois.
     await removeProductImage(imageToRemove);

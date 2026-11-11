@@ -26,6 +26,10 @@
 
       <p v-if="product.description" class="product-card__description">{{ product.description }}</p>
       <span class="product-card__views">{{ product.views || 0 }} visualizações</span>
+      <div class="product-card__stats" aria-label="Curtidas e comentários">
+        <span title="Curtidas"><i class="bi bi-heart"></i> {{ formatCount(product.likesCount) }}</span>
+        <span title="Comentários"><i class="bi bi-chat"></i> {{ formatCount(product.commentsCount) }}</span>
+      </div>
     </div>
 
     <div v-if="$slots.actions" class="product-card__actions">
@@ -38,6 +42,7 @@
 import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { getProductImageUrl } from '../utils/media'
+import { formatCount } from '../utils/format'
 
 const props = defineProps({
   product: { type: Object, required: true },

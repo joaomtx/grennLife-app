@@ -17,6 +17,6 @@ exports.uploadProduct = async (req, res) => {
 
 exports.getProductDetails = async (req, res) => {
     const productId = req.params.id;
-    const { product, isOwner } = await productService.getProductDetails(productId, req.user && req.user.id);
-    return success(res, { product, isOwner });
+    const { product, isOwner, isLiked } = await productService.getProductDetails(productId, req.user && req.user.id);
+    return success(res, { product, isOwner, isLiked });
 };

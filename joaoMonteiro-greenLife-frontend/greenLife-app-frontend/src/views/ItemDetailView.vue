@@ -31,7 +31,13 @@
             <span>@{{ product.User.username }}</span>
           </div>
         </RouterLink>
-        <p class="item-detail__views">{{ product.views }} visualizações</p>
+        <p class="item-detail__views">{{ product.views }} visualizações · {{ commentsCount }} comentários</p>
+        <LikeButton
+          class="item-detail__like"
+          :product-id="product.id"
+          :initial-liked="isLiked"
+          :initial-count="product.likesCount || 0"
+        />
         <!-- Só aparece para o dono. Isso é conveniência de interface, não segurança:
              quem garante a permissão é o 403 da API. -->
         <RouterLink
@@ -43,6 +49,13 @@
         </RouterLink>
       </div>
     </article>
+
+    <CommentSection
+      v-if="product"
+      :product-id="product.id"
+      :initial-count="product.commentsCount || 0"
+      @added="commentsCount = $event"
+    />
   </section>
 </template>
 
@@ -50,11 +63,15 @@
 import { computed, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { getProductById } from '../services/productService'
+import LikeButton from '../components/LikeButton.vue'
+import CommentSection from '../components/CommentSection.vue'
 import { getMediaUrl, getProductImageUrl } from '../utils/media'
 
 const route = useRoute()
 const product = ref(null)
 const isOwner = ref(false)
+const isLiked = ref(false)
+const commentsCount = ref(0)
 const loading = ref(false)
 const errorMessage = ref('')
 
@@ -68,6 +85,7 @@ watch(
   async (id) => {
     product.value = null
     isOwner.value = false
+    isLiked.value = false
     errorMessage.value = ''
     loading.value = true
 
@@ -75,6 +93,8 @@ watch(
       const result = await getProductById(id)
       product.value = result.product
       isOwner.value = result.isOwner
+      isLiked.value = result.isLiked
+      commentsCount.value = result.product.commentsCount || 0
     } catch (error) {
       errorMessage.value = error.message || 'Não foi possível carregar este produto.'
     } finally {
@@ -151,6 +171,10 @@ watch(
 
 .item-detail__edit {
   margin-top: 1rem;
+}
+
+.item-detail__like {
+  margin-top: 0.75rem;
 }
 
 .item-detail__author img {

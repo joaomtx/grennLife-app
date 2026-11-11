@@ -49,6 +49,11 @@
                   <i class="bi bi-grid"></i> Meus Itens
                 </router-link>
               </li>
+              <li role="none">
+                <router-link role="menuitem" class="avatar-menu__item" :to="{ name: 'liked-products' }" @click="closeMenu">
+                  <i class="bi bi-heart"></i> Curtidos
+                </router-link>
+              </li>
               <li role="none"><hr class="avatar-menu__divider" /></li>
               <li role="none">
                 <button role="menuitem" type="button" class="avatar-menu__item avatar-menu__item--danger" @click="handleLogout">

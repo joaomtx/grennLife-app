@@ -1,7 +1,7 @@
 const { body, validationResult } = require('express-validator');
 const { VALIDATION } = require('../../config/constants');
 
-const validate = (req, res, next) => {
+const validate = exports.validate = (req, res, next) => {
     const errors = validationResult(req);
     if (errors.isEmpty()) {
         return next();
@@ -15,9 +15,9 @@ const validate = (req, res, next) => {
 
 exports.registerValidator = [
     body('username')
+    .trim()
     .isLength({ min: VALIDATION.USERNAME_MIN, max: VALIDATION.USERNAME_MAX })
-    .withMessage(`O nome de usuário deve ter entre ${VALIDATION.USERNAME_MIN} e ${VALIDATION.USERNAME_MAX} caracteres.`)
-    .trim(),
+    .withMessage(`O nome de usuário deve ter entre ${VALIDATION.USERNAME_MIN} e ${VALIDATION.USERNAME_MAX} caracteres.`),
     body('email')
     .isEmail()
     .withMessage('Por favor, insira um e-mail válido.')
@@ -33,9 +33,9 @@ exports.registerValidator = [
         return true;
     }),
     body('fullName')
+    .trim()
     .notEmpty()
-    .withMessage('O nome completo é obrigatório.')
-    .trim(),
+    .withMessage('O nome completo é obrigatório.'),
     validate
 ];
 
@@ -52,14 +52,14 @@ exports.loginValidator = [
 
 exports.profileUpdateValidator = [
     body('fullName')
+        .trim()
         .notEmpty()
-        .withMessage('O nome completo não pode ser vazio.')
-        .trim(),
+        .withMessage('O nome completo não pode ser vazio.'),
     body('bio')
-        .isLength({ max: VALIDATION.BIO_MAX })
-        .withMessage(`A bio deve ter no máximo ${VALIDATION.BIO_MAX} caracteres.`)
         .optional({ checkFalsy: true })
-        .trim(),
+        .trim()
+        .isLength({ max: VALIDATION.BIO_MAX })
+        .withMessage(`A bio deve ter no máximo ${VALIDATION.BIO_MAX} caracteres.`),
     validate
 ];
 
@@ -75,3 +75,6 @@ exports.productUpdateValidator = [
         .withMessage(`A descrição deve ter no máximo ${VALIDATION.DESCRIPTION_MAX} caracteres.`),
     validate
 ];
+
+// Upload de produto: mesma regra do PUT (trim antes do notEmpty).
+exports.productUploadValidator = exports.productUpdateValidator;

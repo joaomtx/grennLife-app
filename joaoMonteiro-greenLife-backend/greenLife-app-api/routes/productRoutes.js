@@ -5,9 +5,11 @@ const isAuthenticated = require("../middlewares/auth");
 const optionalAuth = require("../middlewares/optionalAuth");
 const productMulter = require("../middlewares/productMulter");
 const asyncHandler = require("../middlewares/asyncHandler");
+const { productUploadValidator } = require("../modules/user/userValidator");
 
 // Rotas protegidas
-router.post("/upload", isAuthenticated, productMulter, asyncHandler(productController.uploadProduct));
+// Multer antes do validador (multipart). Se o validador recusar, o errorHandler apaga o arquivo órfão.
+router.post("/upload", isAuthenticated, productMulter, productUploadValidator, asyncHandler(productController.uploadProduct));
 
 router.get("/:id", optionalAuth, asyncHandler(productController.getProductDetails));
 

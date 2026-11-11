@@ -8,9 +8,9 @@ var indexRouter = require('./routes/index');
 var searchRoutes = require('./modules/search/searchRoutes');
 var userRoutes = require('./modules/user/userRoutes'); 
 var productRoutes = require('./routes/productRoutes');
-var likeRoutes = require('./routes/likeRoutes');
+var likeRoutes = require('./modules/like/likeRoutes');
 require('./config/associations');
-var commentRoutes = require('./routes/commentRoutes');
+var commentRoutes = require('./modules/comment/commentRoutes');
 var errorHandler = require('./middlewares/errorHandler'); 
 
 var app = express();
@@ -29,9 +29,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 app.use('/api', indexRouter);
 app.use('/api', searchRoutes);
 app.use('/api', userRoutes); 
+app.use('/api', likeRoutes);
+app.use('/api', commentRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/likes', likeRoutes);
-app.use('/api/comments', commentRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

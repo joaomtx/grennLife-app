@@ -1,26 +1,13 @@
-const commentService = require("./commentService");
-const { success } = require("../../middlewares/apiResponse");
+const commentService = require('./commentService');
+const { success } = require('../../middlewares/apiResponse');
 
 exports.addComment = async (req, res) => {
-    const { productId } = req.params;
-    const { content } = req.body;
-    const userId = req.user.id;
-
-    try {
-        const newComment = await commentService.addComment(productId, userId, content);
-        return success(res, { comment: newComment }, "Comentário adicionado com sucesso!", 201);
-    } catch (error) {
-        throw error;
-    }
+    // (userId, productId, content) — mesma ordem do service
+    const comment = await commentService.addComment(req.user.id, req.params.productId, req.body.content);
+    return success(res, comment, 'Comentário adicionado com sucesso!', 201);
 };
 
 exports.getComments = async (req, res) => {
-    const { productId } = req.params;
-
-    try {
-        const comments = await commentService.getCommentsByProductId(productId);
-        return success(res, { comments });
-    } catch (error) {
-        throw error;
-    }
+    const comments = await commentService.getComments(req.params.productId);
+    return success(res, comments);
 };
